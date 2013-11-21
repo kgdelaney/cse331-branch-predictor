@@ -1,7 +1,11 @@
 #include <stdio.h>
 #include <netinet/in.h>
 #include "traceread.h"
-#include "predictor.h"
+#ifdef _G_
+#include "predictorg.h"
+#else
+#include "predictor21264.h"
+#endif
 
 FILE * stream;
 
