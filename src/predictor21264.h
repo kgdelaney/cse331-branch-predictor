@@ -14,6 +14,7 @@
   concerned about the memory used by the simulated branch predictor.
 */
 #define LHT_SIZE 1024
+#define LPT_SIZE 1024
 struct LHT_Entry  /* LocalHistoryTable Entry, contains program counter, LRU bit, and the 10 bit outcomes */
 {
     unsigned int pc;
@@ -26,7 +27,7 @@ struct LPT_Entry /* Local Prediction Table Entry. */
 {
     char counter[3];
 };
-static LPT_Entry LocalPredictionTable[1024];
+static LPT_Entry LocalPredictionTable[LPT_SIZE];
 
 static char GlobalHistoryTable[12];
 

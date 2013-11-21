@@ -9,11 +9,11 @@ void init_predictor ()
     {
         LocalHistoryTable[i].pc = 0;
         LocalHistoryTable[i].lastUsed = 1;
-	for( int j = 0; j < 10; ++j )
-	    LocalHistoryTable[i].outcomes[j] = 0;
+        for( int j = 0; j < 10; ++j )
+            LocalHistoryTable[i].outcomes[j] = 0;
 
-	for( int j = 0; j < 3; ++j )
-	    LocalPredictionTable[i].counter[j] = 0;
+        for( int j = 0; j < 3; ++j )
+            LocalPredictionTable[i].counter[j] = 0;
     }
 
     for( int i = 0; i < 12; ++i )
@@ -43,6 +43,7 @@ bool make_prediction (unsigned int pc)
     int LRUIndex = 0;
     int index;
     int LRUNum = 0;
+    char sigBits[3];
     for(int i = 0; i < LHT_SIZE; i++){
         if(LocalHistoryTable[i].pc == pc){
             found = 1;
@@ -63,7 +64,9 @@ bool make_prediction (unsigned int pc)
         index = LRUIndex;
         resetLHTEntry(index);
         LocalHistoryTable[index].pc = pc;
+        currOutcome = LocalHistoryTable[index].outcomes;
     }
+
     return false;
 }
 
