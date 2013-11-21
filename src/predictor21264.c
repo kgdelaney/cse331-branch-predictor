@@ -7,8 +7,8 @@ void init_predictor ()
 {
     for( int i = 0; i < 1024; ++i )
     {
-	LocalHistoryTable[i].pc = 0;
-	LocalHistoryTable[i].lastUsed = 1;
+        LocalHistoryTable[i].pc = 0;
+        LocalHistoryTable[i].lastUsed = 1;
 	for( int j = 0; j < 10; ++j )
 	    LocalHistoryTable[i].outcomes[j] = 0;
 
@@ -29,11 +29,45 @@ void init_predictor ()
     }
 }
 
+void resetLHTEntry(int i){
+    LocalHistoryTable[i].pc = 0;
+    LocalHistoryTable[i].lastUsed = 1;
+	for( int j = 0; j < 10; ++j )
+	    LocalHistoryTable[i].outcomes[j] = 0;
+
+}
 bool make_prediction (unsigned int pc)
 {
-  return true;
+    char *currOutcome;
+    int found = 0;
+    int LRUIndex = 0;
+    int index;
+    int LRUNum = 0;
+    for(int i = 0; i < LHT_SIZE; i++){
+        if(LocalHistoryTable[i].pc == pc){
+            found = 1;
+            currOutcome = LocalHistoryTable[i].outcomes;
+            index = i;
+        }
+        if(LocalHistoryTable[i].lastUsed > LRUNum ){
+            LRUNum = LocalHistoryTable[i].lastUsed;
+            LRUIndex = i;
+        }
+        if(LocalHistoryTable[i].pc == 0 && found == 0){
+            LocalHistoryTable[i].pc = pc; 
+            index=i;
+            break;
+        }
+    }
+    if(found == 0){
+        index = LRUIndex;
+        resetLHTEntry(index);
+        LocalHistoryTable[index].pc = pc;
+    }
+    return false;
 }
 
 void train_predictor (unsigned int pc, bool outcome)
 {
+
 }
