@@ -13,7 +13,7 @@
   case the simulator will use more memory -- that's okay, we're only
   concerned about the memory used by the simulated branch predictor.
 */
-struct LHT_Entry
+struct LHT_Entry  /* LocalHistoryTable Entry, contains program counter, LRU bit, and the 10 bit outcomes */
 {
     unsigned int pc;
     unsigned int lastUsed;
@@ -21,7 +21,7 @@ struct LHT_Entry
 };
 static LHT_Entry LocalHistoryTable[1024];
 
-struct LPT_Entry
+struct LPT_Entry /* Local Prediction Table Entry. */
 {
     char counter[3];
 };
