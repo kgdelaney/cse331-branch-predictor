@@ -1,4 +1,5 @@
 // A very stupid predictor.  It will always predict not taken.
+// but it will be better
 
 void init_predictor ()
 {
