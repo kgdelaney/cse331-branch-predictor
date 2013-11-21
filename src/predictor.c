@@ -1,3 +1,4 @@
+#include <stdio.h>
 // A very stupid predictor.  It will always predict not taken.
 
 void init_predictor ()
