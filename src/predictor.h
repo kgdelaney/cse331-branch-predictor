@@ -13,8 +13,33 @@
   case the simulator will use more memory -- that's okay, we're only
   concerned about the memory used by the simulated branch predictor.
 */
+struct LHT_Entry
+{
+    unsigned int pc;
+    unsigned int lastUsed;
+    char outcomes[10];
+};
+LHT_Entry LocalHistoryTable[1024];
 
+struct LPT_Entry
+{
+    char counter[3];
+};
+LPT_Entry LocalPredictionTable[1024];
 
+char GlobalHistoryTable[12];
+
+struct GPT_Entry
+{
+    char counter[2];
+};
+GPT_Entry GlobalPredictionTable[4096];
+
+struct CPT_Entry
+{
+    char counter[2];
+};
+CPT_Entry ChooserPredictionTable[4096];
 
 
 /*
