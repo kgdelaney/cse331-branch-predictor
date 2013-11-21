@@ -79,7 +79,7 @@ bool make_prediction (unsigned int pc)
     }
     int location = charToBin(currOutcome, 10);
     for(int i = 0; i < 3; i++){
-        localPrediction[i] = LocalHistoryTable[location].counter[i];
+        localPrediction[i] = LocalPredictionTable[location].counter[i];
     }
     return false;
 }
