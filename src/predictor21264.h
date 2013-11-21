@@ -47,6 +47,7 @@ static CPT_Entry ChooserPredictionTable[4096];
   Initialize the predictor.
 */
 void init_predictor ();
+void resetLHTEntry(int i);
 
 /*
   Make a prediction for conditional branch instruction at PC 'pc'.
