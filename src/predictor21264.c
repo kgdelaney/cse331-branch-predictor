@@ -81,7 +81,11 @@ bool make_prediction (unsigned int pc)
     for(int i = 0; i < 3; i++){
         localPrediction[i] = LocalPredictionTable[location].counter[i];
     }
-    return false;
+    if(localPrediction[0] == 1){
+        return true;
+    } else{
+        return false;
+    }
 }
 
 void train_predictor (unsigned int pc, bool outcome)
