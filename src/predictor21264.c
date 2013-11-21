@@ -36,6 +36,16 @@ void resetLHTEntry(int i){
 	    LocalHistoryTable[i].outcomes[j] = 0;
 
 }
+
+int charToBin(char c[10], int size){
+    int num = 0;
+    int i;
+    for(i = size; i >= 0; i--){
+        num += c[i] << size-i-1;
+    }
+    return num;
+
+}
 bool make_prediction (unsigned int pc)
 {
     char *currOutcome;
@@ -44,6 +54,7 @@ bool make_prediction (unsigned int pc)
     int index;
     int LRUNum = 0;
     char sigBits[3];
+    int localPrediction[3];
     for(int i = 0; i < LHT_SIZE; i++){
         if(LocalHistoryTable[i].pc == pc){
             found = 1;
@@ -66,7 +77,10 @@ bool make_prediction (unsigned int pc)
         LocalHistoryTable[index].pc = pc;
         currOutcome = LocalHistoryTable[index].outcomes;
     }
-
+    int location = charToBin(currOutcome, 10);
+    for(int i = 0; i < 3; i++){
+        localPrediction[i] = LocalHistoryTable[location].counter[i];
+    }
     return false;
 }
 
