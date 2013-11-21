@@ -28,6 +28,11 @@ static BHT_Entry BranchHistoryTable[16384];
 void init_predictor ();
 
 /*
+ * convert GHT to an unsigned int
+ */
+unsigned int convertGHT2Int();
+
+/*
   Make a prediction for conditional branch instruction at PC 'pc'.
   Returning true indicates a prediction of taken; returning false
   indicates a prediction of not taken.

@@ -31,7 +31,7 @@ void init_predictor ()
 
 bool make_prediction (unsigned int pc)
 {
-  return false;
+  return true;
 }
 
 void train_predictor (unsigned int pc, bool outcome)
