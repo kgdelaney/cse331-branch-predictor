@@ -1,0 +1,4 @@
+for i in DIST-FP-1.bz2  DIST-FP-2.bz2  DIST-INT-1.bz2  DIST-INT-2.bz2  DIST-MM-1.bz2 DIST-MM-2.bz2  DIST-SERV-1.bz2  DIST-SERV-2.bz2
+do
+    ./predictor ../traces/$i
+done
