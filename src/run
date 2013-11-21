@@ -1,5 +1,5 @@
 for i in DIST-FP-1.bz2  DIST-FP-2.bz2  DIST-INT-1.bz2  DIST-INT-2.bz2  DIST-MM-1.bz2 DIST-MM-2.bz2  DIST-SERV-1.bz2  DIST-SERV-2.bz2
 do
     echo -e "\n=== $i"
-    bunzip2 -c -k ../traces/$i |./predictor
+    bunzip2 -c -k ../traces/$i |./$1
 done
