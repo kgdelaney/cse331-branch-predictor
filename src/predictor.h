@@ -19,27 +19,27 @@ struct LHT_Entry
     unsigned int lastUsed;
     char outcomes[10];
 };
-LHT_Entry LocalHistoryTable[1024];
+static LHT_Entry LocalHistoryTable[1024];
 
 struct LPT_Entry
 {
     char counter[3];
 };
-LPT_Entry LocalPredictionTable[1024];
+static LPT_Entry LocalPredictionTable[1024];
 
-char GlobalHistoryTable[12];
+static char GlobalHistoryTable[12];
 
 struct GPT_Entry
 {
     char counter[2];
 };
-GPT_Entry GlobalPredictionTable[4096];
+static GPT_Entry GlobalPredictionTable[4096];
 
 struct CPT_Entry
 {
     char counter[2];
 };
-CPT_Entry ChooserPredictionTable[4096];
+static CPT_Entry ChooserPredictionTable[4096];
 
 
 /*
