@@ -18,6 +18,17 @@ struct LHT_Entry  /* LocalHistoryTable Entry, contains program counter, LRU bit,
     unsigned int pc;
     unsigned int lastUsed;
     char outcomes[10];
+    int createIndex()
+    {
+	int index = 0;
+
+	for( int i = 0; i < 10; ++i )
+	{
+	    index += outcomes[i] << i;
+	}
+
+	return index;
+    }
 };
 static LHT_Entry LocalHistoryTable[1024];
 
@@ -28,6 +39,17 @@ struct LPT_Entry /* Local Prediction Table Entry. */
 static LPT_Entry LocalPredictionTable[1024];
 
 static char GlobalHistoryTable[12];
+static int histTableToInt()
+{
+    int index = 0;
+
+    for( int i = 0; i < 12; ++i )
+    {
+	index += GlobalHistoryTable[i] << i;
+    }
+
+    return index;
+}
 
 struct GPT_Entry
 {
