@@ -60,4 +60,59 @@ bool make_prediction (unsigned int pc)
 
 void train_predictor (unsigned int pc, bool outcome)
 {
+    unsigned int GHTValue = convertGHT2Int();
+    int prediction = GHTValue ^ pc;
+    if(outcome)
+    {
+        //Branch has been taken, update the BHT counter(s), 
+        //and the global counter 
+        if(BranchHistoryTable[prediction].counter[0] == 1 &&
+            BranchHistoryTable[prediction].counter[1] == 0)
+        {
+            BranchHistoryTable[prediction].counter[1] = 1;
+        }
+        if(BranchHistoryTable[prediction].counter[0] == 1 &&
+            BranchHistoryTable[prediction].counter[1] == 1)
+        {
+            ; //nop
+        }
+        if(BranchHistoryTable[prediction].counter[0] == 0 &&
+            BranchHistoryTable[prediction].counter[1] == 0)
+        {
+            BranchHistoryTable[prediction].counter[1] = 1;
+        }
+        if(BranchHistoryTable[prediction].counter[0] == 0 &&
+            BranchHistoryTable[prediction].counter[1] == 1)
+        {
+            BranchHistoryTable[prediction].counter[0] = 1;
+        }
+        //update the global counter here...
+    }
+    else
+    {
+        //Branch not taken, decrement counters in BHT
+        //update the global counter
+        if(BranchHistoryTable[prediction].counter[0] == 1 &&
+            BranchHistoryTable[prediction].counter[1] == 0)
+        {
+            BranchHistoryTable[prediction].counter[1] = 1;
+            BranchHistoryTable[prediction].counter[0] = 0;
+        }
+        if(BranchHistoryTable[prediction].counter[0] == 1 &&
+            BranchHistoryTable[prediction].counter[1] == 1)
+        {
+            BranchHistoryTable[prediction].counter[1] = 0;
+        }
+        if(BranchHistoryTable[prediction].counter[0] == 0 &&
+            BranchHistoryTable[prediction].counter[1] == 0)
+        {
+            ; //nop
+        }
+        if(BranchHistoryTable[prediction].counter[0] == 0 &&
+            BranchHistoryTable[prediction].counter[1] == 1)
+        {
+            BranchHistoryTable[prediction].counter[1] = 0;
+        }
+    }
+
 }
