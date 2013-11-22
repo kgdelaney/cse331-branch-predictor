@@ -29,6 +29,24 @@ unsigned int convertGHT2Int()
     return value;
 }
 
+void convertInt2GHT(unsigned int counter)
+{
+    unsigned int mask = 1 << (sizeof(int) * 8 - 1);
+    
+    for(int i = 0; i < 14; i++)
+     {
+         if( (counter & mask) == 1)
+         {
+             GlobalHistoryTable[i] = 1;
+         }
+         else
+         {
+             GlobalHistoryTable[i] = 0;
+         }
+         mask >>= 1;
+     }
+}
+
 bool make_prediction (unsigned int pc)
 {
     unsigned int GHTValue = convertGHT2Int();
@@ -87,6 +105,7 @@ void train_predictor (unsigned int pc, bool outcome)
             BranchHistoryTable[prediction].counter[0] = 1;
         }
         //update the global counter here...
+        convertInt2GHT(GHTValue++);
     }
     else
     {
@@ -113,6 +132,7 @@ void train_predictor (unsigned int pc, bool outcome)
         {
             BranchHistoryTable[prediction].counter[1] = 0;
         }
+        convertInt2GHT(GHTValue--);
     }
 
 }
