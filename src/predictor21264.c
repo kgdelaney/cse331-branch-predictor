@@ -67,7 +67,7 @@ bool make_prediction (unsigned int pc)
             break;
         }
     }
-    if(index == -1){
+    if(index == -1){ /* If no spot is open in LHT, we remove the LRU node and replace it with new pc */
         index = LRUIndex;
         resetLHTEntry(index);
         LocalHistoryTable[index].pc = pc;
