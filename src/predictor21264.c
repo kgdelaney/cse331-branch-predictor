@@ -31,7 +31,7 @@ void init_predictor ()
 
 bool make_prediction (unsigned int pc)
 {
-    int index = 0;
+    int index = -1;
     for( int i = 0; i < 1024; ++i )
     {
 	if( LocalHistoryTable[i].pc == pc )
@@ -40,6 +40,9 @@ bool make_prediction (unsigned int pc)
 	    i = 1024;
 	}
     }
+
+    if( index == -1 )
+	return false;
 
     int localPredictionIndex = LocalHistoryTable[index].createIndex();
     int globalPredictionIndex = histTableToInt();
@@ -75,7 +78,7 @@ void train_predictor (unsigned int pc, bool outcome)
 	    }
 	    LocalHistoryTable[i].outcomes[9] = outcome ? 1 : 0;
 
-	    // Update the local history
+	    // Update the local prediction
 	    int localIndex = LocalHistoryTable[i].createIndex();
 	    for( int j = 2; j > 0; --j )
 	    {
