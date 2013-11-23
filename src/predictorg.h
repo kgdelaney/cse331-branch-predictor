@@ -31,6 +31,10 @@ void init_predictor ();
  * convert GHT to an unsigned int
  */
 unsigned int convertGHT2Int();
+/*
+ * convert an unsigned int into bitsthat compose the GHT
+ */
+void convertInt2GHT(unsigned int counter);
 
 /*
   Make a prediction for conditional branch instruction at PC 'pc'.
