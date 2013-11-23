@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <iostream>
 #include "predictorg.h"
 #include<math.h>
 // A very stupid predictor.  It will always predict not taken.
@@ -50,36 +51,40 @@ void convertInt2GHT(unsigned int counter)
 bool make_prediction (unsigned int pc)
 {
     unsigned int GHTValue = convertGHT2Int();
-    int prediction = GHTValue ^ pc;
+    unsigned int prediction = (GHTValue ^ pc) % 16384;
     if(BranchHistoryTable[prediction].counter[0] == 1 &&
         BranchHistoryTable[prediction].counter[1] == 1)
     {
         //strongly taken
+        return true;
     }
     if(BranchHistoryTable[prediction].counter[0] == 1 &&
         BranchHistoryTable[prediction].counter[1] == 0)
     {
         //weakly taken
+        return true;
     }
     if(BranchHistoryTable[prediction].counter[0] == 0 &&
         BranchHistoryTable[prediction].counter[1] == 1)
     {
         //weakly not taken
+        return false;
     }
     if(BranchHistoryTable[prediction].counter[0] == 0 &&
         BranchHistoryTable[prediction].counter[1] == 0)
     {
         //strongly not taken
+        return false;
     }
     
     
-    return false;
+    return true;
 }
 
 void train_predictor (unsigned int pc, bool outcome)
 {
     unsigned int GHTValue = convertGHT2Int();
-    int prediction = GHTValue ^ pc;
+    int prediction = (GHTValue ^ pc) % 16384;
     if(outcome)
     {
         //Branch has been taken, update the BHT counter(s), 
@@ -105,7 +110,7 @@ void train_predictor (unsigned int pc, bool outcome)
             BranchHistoryTable[prediction].counter[0] = 1;
         }
         //update the global counter here...
-        convertInt2GHT(GHTValue++);
+        //convertInt2GHT(GHTValue++);
     }
     else
     {
@@ -132,7 +137,7 @@ void train_predictor (unsigned int pc, bool outcome)
         {
             BranchHistoryTable[prediction].counter[1] = 0;
         }
-        convertInt2GHT(GHTValue--);
+        //convertInt2GHT(GHTValue--);
     }
 
 }
