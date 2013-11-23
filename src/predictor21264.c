@@ -129,10 +129,10 @@ void train_predictor (unsigned int pc, bool outcome)
 	    // Update the global prediction
 	    GlobalPredictionTable[ghtIndex].counter[0] =
 		GlobalPredictionTable[ghtIndex].counter[1];
-	    GlobalPredictionTAble[ghtIndex].counter[1] = outcome ? 1 : 0;
+	    GlobalPredictionTable[ghtIndex].counter[1] = outcome ? 1 : 0;
 
 	    // Update the Chooser, if needed
-	    if( GlobalPredictionTable[ghtIndex].counter !=
+	    if( GlobalPredictionTable[ghtIndex].counter[0] !=
 		    LocalPredictionTable[localIndex].counter[1] )
 	    {
 		if( ChooserPredictionTable[ghtIndex].counter[1] == 1

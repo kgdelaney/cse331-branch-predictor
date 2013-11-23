@@ -20,6 +20,17 @@ struct LHT_Entry  /* LocalHistoryTable Entry, contains program counter, LRU bit,
     unsigned int pc;
     unsigned int lastUsed;
     char outcomes[10]; /* Last 10 outcomes, 1 is taken, 0 is not taken */
+    int createIndex()
+    {
+	int index = 0;
+
+	for( int i = 0; i < 10; ++i )
+	{
+	    index += outcomes[i] << i;
+	}
+
+	return index;
+    }
 };
 static LHT_Entry LocalHistoryTable[LHT_SIZE];
 
