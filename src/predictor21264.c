@@ -10,10 +10,10 @@ void init_predictor ()
         LocalHistoryTable[i].pc = 0;
         LocalHistoryTable[i].lastUsed = 1;
         for( int j = 0; j < 10; ++j )
-            LocalHistoryTable[i].outcomes[j] = 0;
+            LocalHistoryTable[i].outcomes[j] = 1;
 
         for( int j = 0; j < 3; ++j )
-            LocalPredictionTable[i].counter[j] = 0;
+            LocalPredictionTable[i].counter[j] = 1;
     }
 
     for( int i = 0; i < 12; ++i )
