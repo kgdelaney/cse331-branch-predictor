@@ -49,15 +49,13 @@ int charToBin(char c[10], int size){
 bool make_prediction (unsigned int pc)
 {
     char *currOutcome;
-    int found = 0;
     int LRUIndex = 0;
-    int index;
+    int index = -1;
     int LRUNum = 0;
     char sigBits[3];
     int localPrediction[3];
     for(int i = 0; i < LHT_SIZE; i++){
         if(LocalHistoryTable[i].pc == pc){
-            found = 1;
             currOutcome = LocalHistoryTable[i].outcomes;
             index = i;
         }
@@ -65,13 +63,13 @@ bool make_prediction (unsigned int pc)
             LRUNum = LocalHistoryTable[i].lastUsed;
             LRUIndex = i;
         }
-        if(LocalHistoryTable[i].pc == 0 && found == 0){
+        if(LocalHistoryTable[i].pc == 0 && index == -1){
             LocalHistoryTable[i].pc = pc; 
             index=i;
             break;
         }
     }
-    if(found == 0){
+    if(index == -1){
         index = LRUIndex;
         resetLHTEntry(index);
         LocalHistoryTable[index].pc = pc;
@@ -81,11 +79,10 @@ bool make_prediction (unsigned int pc)
     for(int i = 0; i < 3; i++){
         localPrediction[i] = LocalPredictionTable[location].counter[i];
     }
-    if(localPrediction[0] == 1){
+    if(localPrediction[0] == 1) /* Strongly Taken, Weakly Taken */
         return true;
-    } else{
+    else                        /*Weakly Not-Taken, Strongly Not-Taking */
         return false;
-    }
 }
 
 void train_predictor (unsigned int pc, bool outcome)
