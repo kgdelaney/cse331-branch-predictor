@@ -51,7 +51,6 @@ bool make_prediction (unsigned int pc)
     char *currOutcome;
     int LRUIndex = 0;
     int index = -1;
-    int LRUNum = 0;
     char sigBits[3];
     int localPrediction[3];
     for(int i = 0; i < LHT_SIZE; i++){
@@ -59,8 +58,7 @@ bool make_prediction (unsigned int pc)
             currOutcome = LocalHistoryTable[i].outcomes;
             index = i;
         }
-        if(LocalHistoryTable[i].lastUsed > LRUNum ){
-            LRUNum = LocalHistoryTable[i].lastUsed;
+        if(LocalHistoryTable[i].lastUsed > LocalHistoryTable[LRUIndex].lastUsed ){
             LRUIndex = i;
         }
         if(LocalHistoryTable[i].pc == 0 && index == -1){
