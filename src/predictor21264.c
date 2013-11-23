@@ -57,6 +57,7 @@ bool make_prediction (unsigned int pc)
         if(LocalHistoryTable[i].pc == pc){
             currOutcome = LocalHistoryTable[i].outcomes;
             index = i;
+            break;
         }
         if(LocalHistoryTable[i].lastUsed > LocalHistoryTable[LRUIndex].lastUsed ){
             LRUIndex = i;
