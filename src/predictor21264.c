@@ -49,29 +49,25 @@ int charToBin(char c[10], int size){
 bool make_prediction (unsigned int pc)
 {
     char *currOutcome;
-    int found = 0;
     int LRUIndex = 0;
-    int index;
-    int LRUNum = 0;
+    int index = -1;
     char sigBits[3];
     int localPrediction[3];
     for(int i = 0; i < LHT_SIZE; i++){
         if(LocalHistoryTable[i].pc == pc){
-            found = 1;
             currOutcome = LocalHistoryTable[i].outcomes;
             index = i;
         }
-        if(LocalHistoryTable[i].lastUsed > LRUNum ){
-            LRUNum = LocalHistoryTable[i].lastUsed;
+        if(LocalHistoryTable[i].lastUsed > LocalHistoryTable[LRUIndex].lastUsed ){
             LRUIndex = i;
         }
-        if(LocalHistoryTable[i].pc == 0 && found == 0){
+        if(LocalHistoryTable[i].pc == 0 && index == -1){
             LocalHistoryTable[i].pc = pc; 
             index=i;
             break;
         }
     }
-    if(found == 0){
+    if(index == -1){ /* If no spot is open in LHT, we remove the LRU node and replace it with new pc */
         index = LRUIndex;
         resetLHTEntry(index);
         LocalHistoryTable[index].pc = pc;
@@ -81,11 +77,10 @@ bool make_prediction (unsigned int pc)
     for(int i = 0; i < 3; i++){
         localPrediction[i] = LocalPredictionTable[location].counter[i];
     }
-    if(localPrediction[0] == 1){
+    if(localPrediction[0] == 1) /* Strongly Taken, Weakly Taken */
         return true;
-    } else{
+    else                        /*Weakly Not-Taken, Strongly Not-Taking */
         return false;
-    }
 }
 
 void train_predictor (unsigned int pc, bool outcome)
