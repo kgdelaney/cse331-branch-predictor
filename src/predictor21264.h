@@ -13,30 +13,21 @@
   case the simulator will use more memory -- that's okay, we're only
   concerned about the memory used by the simulated branch predictor.
 */
+#define LHT_SIZE 1024
+#define LPT_SIZE 1024
 struct LHT_Entry  /* LocalHistoryTable Entry, contains program counter, LRU bit, and the 10 bit outcomes */
 {
     unsigned int pc;
     unsigned int lastUsed;
-    char outcomes[10];
-    int createIndex()
-    {
-	int index = 0;
-
-	for( int i = 0; i < 10; ++i )
-	{
-	    index += outcomes[i] << i;
-	}
-
-	return index;
-    }
+    char outcomes[10]; /* Last 10 outcomes, 1 is taken, 0 is not taken */
 };
-static LHT_Entry LocalHistoryTable[1024];
+static LHT_Entry LocalHistoryTable[LHT_SIZE];
 
 struct LPT_Entry /* Local Prediction Table Entry. */
 {
     char counter[3];
 };
-static LPT_Entry LocalPredictionTable[1024];
+static LPT_Entry LocalPredictionTable[LPT_SIZE];
 
 static char GlobalHistoryTable[12];
 static int histTableToInt()
@@ -68,6 +59,7 @@ static CPT_Entry ChooserPredictionTable[4096];
   Initialize the predictor.
 */
 void init_predictor ();
+void resetLHTEntry(int i);
 
 /*
   Make a prediction for conditional branch instruction at PC 'pc'.

@@ -7,13 +7,13 @@ void init_predictor ()
 {
     for( int i = 0; i < 1024; ++i )
     {
-	LocalHistoryTable[i].pc = 0;
-	LocalHistoryTable[i].lastUsed = 1;
-	for( int j = 0; j < 10; ++j )
-	    LocalHistoryTable[i].outcomes[j] = 0;
+        LocalHistoryTable[i].pc = 0;
+        LocalHistoryTable[i].lastUsed = 1;
+        for( int j = 0; j < 10; ++j )
+            LocalHistoryTable[i].outcomes[j] = 0;
 
-	for( int j = 0; j < 3; ++j )
-	    LocalPredictionTable[i].counter[j] = 0;
+        for( int j = 0; j < 3; ++j )
+            LocalPredictionTable[i].counter[j] = 0;
     }
 
     for( int i = 0; i < 12; ++i )
@@ -29,28 +29,63 @@ void init_predictor ()
     }
 }
 
+void resetLHTEntry(int i){
+    LocalHistoryTable[i].pc = 0;
+    LocalHistoryTable[i].lastUsed = 1;
+	for( int j = 0; j < 10; ++j )
+	    LocalHistoryTable[i].outcomes[j] = 0;
+
+}
+
+int charToBin(char c[10], int size){
+    int num = 0;
+    int i;
+    for(i = size; i >= 0; i--){
+        num += c[i] << size-i-1;
+    }
+    return num;
+
+}
 bool make_prediction (unsigned int pc)
 {
-    int index = -1;
-    for( int i = 0; i < 1024; ++i )
-    {
-	if( LocalHistoryTable[i].pc == pc )
-	{
-	    index = i;
-	    i = 1024;
-	}
+    char *currOutcome;
+    int found = 0;
+    int LRUIndex = 0;
+    int index;
+    int LRUNum = 0;
+    char sigBits[3];
+    int localPrediction[3];
+    for(int i = 0; i < LHT_SIZE; i++){
+        if(LocalHistoryTable[i].pc == pc){
+            found = 1;
+            currOutcome = LocalHistoryTable[i].outcomes;
+            index = i;
+        }
+        if(LocalHistoryTable[i].lastUsed > LRUNum ){
+            LRUNum = LocalHistoryTable[i].lastUsed;
+            LRUIndex = i;
+        }
+        if(LocalHistoryTable[i].pc == 0 && found == 0){
+            LocalHistoryTable[i].pc = pc; 
+            index=i;
+            break;
+        }
     }
-
-    if( index == -1 )
-	return false;
-
-    int localPredictionIndex = LocalHistoryTable[index].createIndex();
-    int globalPredictionIndex = histTableToInt();
-
-    if( ChooserPredictionTable[globalPredictionIndex].counter[0] == 1 )
-	return GlobalPredictionTable[globalPredictionIndex].counter[0] == 1;
-    else
-	return LocalPredictionTable[localPredictionIndex].counter[0] == 1;
+    if(found == 0){
+        index = LRUIndex;
+        resetLHTEntry(index);
+        LocalHistoryTable[index].pc = pc;
+        currOutcome = LocalHistoryTable[index].outcomes;
+    }
+    int location = charToBin(currOutcome, 10);
+    for(int i = 0; i < 3; i++){
+        localPrediction[i] = LocalPredictionTable[location].counter[i];
+    }
+    if(localPrediction[0] == 1){
+        return true;
+    } else{
+        return false;
+    }
 }
 
 void train_predictor (unsigned int pc, bool outcome)
@@ -73,7 +108,7 @@ void train_predictor (unsigned int pc, bool outcome)
 	    LocalHistoryTable[i].lastUsed = 0;
 	    for( int j = 9; j > 0; --j )
 	    {
-		LocalHistoryTable[i].outcomes[j - 1] = 
+		LocalHistoryTable[i].outcomes[j-1] =
 		    LocalHistoryTable[i].outcomes[j];
 	    }
 	    LocalHistoryTable[i].outcomes[9] = outcome ? 1 : 0;
@@ -89,7 +124,7 @@ void train_predictor (unsigned int pc, bool outcome)
 
 	    // Update the global history
 	    int ghtIndex = histTableToInt();
-	    for( int j = 12; j > 0; --j )
+	    for( int j = 12; j > 12; --j )
 	    {
 		GlobalHistoryTable[j-1] = GlobalHistoryTable[j];
 	    }
@@ -98,10 +133,10 @@ void train_predictor (unsigned int pc, bool outcome)
 	    // Update the global prediction
 	    GlobalPredictionTable[ghtIndex].counter[0] =
 		GlobalPredictionTable[ghtIndex].counter[1];
-	    GlobalPredictionTable[ghtIndex].counter[1] = outcome ? 1 : 0;
+	    GlobalPredictionTAble[ghtIndex].counter[1] = outcome ? 1 : 0;
 
 	    // Update the Chooser, if needed
-	    if( GlobalPredictionTable[ghtIndex].counter[0] != 
+	    if( GlobalPredictionTable[ghtIndex].counter !=
 		    LocalPredictionTable[localIndex].counter[1] )
 	    {
 		if( ChooserPredictionTable[ghtIndex].counter[1] == 1
@@ -132,7 +167,7 @@ void train_predictor (unsigned int pc, bool outcome)
     LocalHistoryTable[LRUindex].lastUsed = 0;
     for( int i = 9; i > -1; --i )
     {
-	LocalHistoryTable[LRUindex].outcomes[i] = 0;;
+	LocalHistoryTable[LRUindex].outcomes[i] = 0;
     }
     LocalHistoryTable[LRUindex].outcomes[9] = outcome ? 1 : 0;
 }
